@@ -1,0 +1,10 @@
+{
+  "displayName" : "Machine Uptime",
+  "author" : ["Guillaume PRIOU", "Gilles DUBOIS"],
+  "contributor" : [],
+  "supportedAgent" : ["Windows", "Unix"],
+  "description" : {
+    "fr" : "Remonte le temps de mise en tension",
+    "en" : "Retrieve Machine Uptime"
+  }
+}
