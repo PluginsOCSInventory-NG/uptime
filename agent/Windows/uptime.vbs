@@ -8,9 +8,10 @@ Set colOperatingSystems=objWMIService.ExecQuery _
 For Each objOS in colOperatingSystems
   intSystemUptime=Int(objOS.SystemUpTime)
   TimedAt=FormatDateTime(Date(),2) &", " &FormatDateTime(Time(),4)
-  Wscript.echo "<UPTIME>"
-  Wscript.echo UpTime(intSystemUptime)
-  Wscript.echo "</UPTIME>"
+  Wscript.echo _
+    "<UPTIME>" & VbCrLf &_
+    UpTime(intSystemUptime) & VbCrLf &_
+    "</UPTIME>"
 next
 Function UpTime(S)
   M=S\60 : S=S mod 60 : H=M\60 : M=M mod 60 : D=H\24
