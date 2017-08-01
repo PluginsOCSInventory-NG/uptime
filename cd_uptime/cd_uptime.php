@@ -27,7 +27,7 @@
 	$tab_options['form_name']=$form_name;
 	$tab_options['table_name']=$table_name;
 	echo open_form($form_name);
-	$list_fields=array( 'uptime' => 'time',
+	$list_fields=array( 'Elapsed time since last start' => 'time',
 	);
 	$list_col_cant_del=$list_fields;
 	$default_fields= $list_fields;
