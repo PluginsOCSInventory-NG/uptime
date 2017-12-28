@@ -1,19 +1,16 @@
 '----------------------------------------------------------
 ' Plugin for OCS Inventory NG 2.x
 ' Script :		Retrieve uptime PC since last reboot
-' Version :		2.00
-' Date :		24/07/2017
+' Version :		2.10
+' Date :		27/09/2017
 ' Author :		Stéphane PAUTREL (acb78.com)
 '----------------------------------------------------------
 ' OS checked [X] on	32b	64b	(Professionnal edition)
-'	Windows XP	[X]
+'	Windows XP		[X]
 '	Windows Vista	[X]	[X]
-'	Windows 7	[X]	[X]
-'	Windows 8.1	[X]	[X]	
-'	Windows 10	[X]	[X]
-'	Windows 2k8R2		[X]
-'	Windows 2k12R2		[X]
-'	Windows 2k16		[X]
+'	Windows 7		[X]	[X]
+'	Windows 8.1		[X]	[X]	
+'	Windows 10		[X]	[X]
 ' ---------------------------------------------------------
 ' NOTE : No checked on Windows 8
 ' ---------------------------------------------------------
@@ -27,7 +24,8 @@ For Each objOS in colOS
 	uptimeTmps = DateDiff("s",CDate(sLastBoot),CDate(sNow))
 	Wscript.echo _
 		"<UPTIME>" & VbCrLf &_
-		"<TIME>" & uptime(uptimeTmps) & "</TIME>" & VbCrLf &_
+		"<TIME>" & sLastBoot & "</TIME>" & VbCrLf &_
+		"<DURATION>" & uptime(uptimeTmps) & "</DURATION>" & VbCrLf &_
 		"</UPTIME>"
 Next
 

@@ -24,6 +24,7 @@ $DATA_MAP{uptime} = {
 	cache => 0,
 	fields => {
              TIME => {},
+	     DURATION => {}
 }
 };
 1;
