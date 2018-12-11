@@ -3,6 +3,8 @@
   "author" : ["Guillaume PRIOU", "Gilles DUBOIS"],
   "contributor" : [],
   "supportedAgent" : ["Windows", "Unix"],
+  "version" : "1.1",
+  "licence" : "GPLv2",
   "description" : {
     "fr" : "Remonte le temps de mise en tension",
     "en" : "Retrieve Machine Uptime"
