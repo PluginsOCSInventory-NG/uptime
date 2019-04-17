@@ -1,37 +1,34 @@
 <?php
-function plugin_version_uptime()
+
+/**
+ * This function is called on installation and is used to create database schema for the plugin
+ */
+function extension_install_uptime()
 {
-return array('name' => 'uptime',
-'version' => '1.1',
-'author'=> 'Guillaume PRIOU, Gilles DUBOIS',
-'license' => 'GPLv2',
-'verMinOcs' => '2.2');
+    $commonObject = new ExtensionCommon;
+
+    $commonObject -> sqlQuery("CREATE TABLE IF NOT EXISTS `uptime` (
+                              `ID` INT(11) NOT NULL AUTO_INCREMENT,
+                              `HARDWARE_ID` INT(11) NOT NULL,
+                              `TIME` VARCHAR(64) DEFAULT NULL,
+                              `DURATION` VARCHAR(255) DEFAULT NULL,
+                              PRIMARY KEY  (`ID`,`HARDWARE_ID`)
+                              ) ENGINE=INNODB ;");
 }
 
-function plugin_init_uptime()
+/**
+ * This function is called on removal and is used to destroy database schema for the plugin
+ */
+function extension_delete_uptime()
 {
-$object = new plugins;
-$object -> add_cd_entry("uptime","other");
-
-// Officepack table creation
-
-$object -> sql_query("CREATE TABLE IF NOT EXISTS `uptime` (
-  `ID` INT(11) NOT NULL AUTO_INCREMENT,
-  `HARDWARE_ID` INT(11) NOT NULL,
-  `TIME` VARCHAR(64) DEFAULT NULL,
-  `DURATION` VARCHAR(255) DEFAULT NULL,
-  PRIMARY KEY  (`ID`,`HARDWARE_ID`)
-) ENGINE=INNODB ;");
-
+    $commonObject = new ExtensionCommon;
+    $commonObject -> sqlQuery("DROP TABLE `uptime`;");
 }
 
-function plugin_delete_uptime()
+/**
+ * This function is called on plugin upgrade
+ */
+function extension_upgrade_uptime()
 {
-$object = new plugins;
-$object -> del_cd_entry("uptime");
-
-$object -> sql_query("DROP TABLE `uptime`;");
 
 }
-
-?>
