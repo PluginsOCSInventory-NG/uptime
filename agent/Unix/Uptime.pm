@@ -52,6 +52,7 @@ sub uptime_inventory_handler {
  
    my $luptime = `cat /proc/uptime | awk '{print $1}'`;
    my $uptime = undef;
+   my $datetime = `uptime -s`;
  
 # These help us calculate the minutes and hours
    my $min=60;
@@ -85,10 +86,13 @@ if($days < 10) {$days = "0$days"; }
 #print "$days:$hours:$minutes:$seconds";
  
 $uptime = "$days days $hours hours $minutes minutes";
+
+print "uptime is : $uptime, datetime is : $datetime";
  
    push @{$common->{xmltags}->{UPTIME}},
    {
-      TIME => [$uptime],
+      DURATION => [$uptime],
+      LOG_DATE => [$datetime]
    };
 }
  

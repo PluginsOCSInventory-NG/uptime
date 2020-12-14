@@ -28,8 +28,8 @@
 	$tab_options['table_name']=$table_name;
 	echo open_form($form_name);
 	$list_fields=array(
-		'Date and time' => 'time',
-		'Elapsed time since last start' => 'duration'
+		'Date and time' => 'LOG_DATE',
+		'Elapsed time since last start' => 'DURATION'
 	);
 	$list_col_cant_del=$list_fields;
 	$default_fields= $list_fields;

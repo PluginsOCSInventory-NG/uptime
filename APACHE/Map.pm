@@ -19,12 +19,12 @@ $DATA_MAP{uptime} = {
 	multi => 1,
 	auto => 1,
 	delOnReplace => 1,
-	sortBy => 'TIME',
+	sortBy => 'LOG_DATE',
 	writeDiff => 0,
 	cache => 0,
 	fields => {
-             TIME => {},
-	     DURATION => {}
+        LOG_DATE => {},
+	    DURATION => {}
 }
 };
 1;
