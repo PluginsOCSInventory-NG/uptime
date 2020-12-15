@@ -6,7 +6,7 @@
 function extension_install_uptime()
 {
     $commonObject = new ExtensionCommon;
-
+    $commonObject -> sqlQuery("DROP TABLE IF EXISTS `uptime`;");
     $commonObject -> sqlQuery("CREATE TABLE IF NOT EXISTS `uptime` (
                               `ID` INT(11) NOT NULL AUTO_INCREMENT,
                               `HARDWARE_ID` INT(11) NOT NULL,
@@ -22,7 +22,7 @@ function extension_install_uptime()
 function extension_delete_uptime()
 {
     $commonObject = new ExtensionCommon;
-    $commonObject -> sqlQuery("DROP TABLE `uptime`;");
+    $commonObject -> sqlQuery("DROP TABLE IF EXISTS `uptime`;");
 }
 
 /**
