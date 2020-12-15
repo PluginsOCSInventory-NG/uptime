@@ -24,7 +24,7 @@ For Each objOS in colOS
 	uptimeTmps = DateDiff("s",CDate(sLastBoot),CDate(sNow))
 	Wscript.echo _
 		"<UPTIME>" & VbCrLf &_
-		"<TIME>" & sLastBoot & "</TIME>" & VbCrLf &_
+		"<LOG_DATE>" & sLastBoot & "</LOG_DATE>" & VbCrLf &_
 		"<DURATION>" & uptime(uptimeTmps) & "</DURATION>" & VbCrLf &_
 		"</UPTIME>"
 Next
@@ -45,5 +45,5 @@ End Function
 
 Function UpTime(S)
 	M=S\60 : S=S mod 60 : H=M\60 : M=M mod 60 : D=H\24
-	UpTime=D &" jours, " & H MOD 24 & " heures, " & M & " minutes"
+	UpTime=D &" days, " & H MOD 24 & " hours, " & M & " minutes"
 End Function
