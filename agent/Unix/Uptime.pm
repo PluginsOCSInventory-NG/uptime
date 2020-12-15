@@ -86,8 +86,6 @@ if($days < 10) {$days = "0$days"; }
 #print "$days:$hours:$minutes:$seconds";
  
 $uptime = "$days days $hours hours $minutes minutes";
-
-print "uptime is : $uptime, datetime is : $datetime";
  
    push @{$common->{xmltags}->{UPTIME}},
    {
