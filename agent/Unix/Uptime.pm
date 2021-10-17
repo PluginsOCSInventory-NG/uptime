@@ -50,11 +50,23 @@ sub uptime_inventory_handler {
    #I add the treatments for my new killer feature
    $logger->debug("Yeah you are in uptime_inventory_handler :)");
  
-   my $luptime = `cat /proc/uptime | awk '{print $1}'`;
-   my $uptime = undef;
-   my $datetime = `uptime -s`;
- 
-# These help us calculate the minutes and hours
+   if ($^0 ne 'Darwin') {
+       my $luptime = `cat /proc/uptime | awk '{print $1}'`;
+       my $uptime = undef;
+       my $datetime = `uptime -s`;
+   } else {
+       my $boottime = `sysctl -n kern.boottime | awk -F '[,]' '{print \$4}`;
+       chomp $boottime;
+       my $currtime = `date -j +'%s'`;
+       chomp $currtime;
+
+       my $luptime=$currtime-$boottime;
+       my $uptime=undef;
+       my $datetime = `date -j -r $boottime+'%Y-%0m-%0d %H:%M:%S'`;
+       chomp $datetime;
+   }
+
+   # These help us calculate the minutes and hours
    my $min=60;
    my $hour = $min*60;
    my $day = $hour*24;
@@ -63,10 +75,10 @@ sub uptime_inventory_handler {
    my $hours = 0;
    my $days = 0;
  
-# Make the uptime number integer
+   # Make the uptime number integer
    my $seconds = int($luptime);
  
-while ($seconds >= $min) {
+   while ($seconds >= $min) {
         while ($seconds >= $hour) {
                 while ($seconds >= $day) {
                         $seconds -= $day;
@@ -77,15 +89,13 @@ while ($seconds >= $min) {
         }
         $seconds -= $min;
         ++$minutes
-}
-if($seconds < 10) { $seconds = "0$seconds"; }
-if($minutes < 10) { $minutes = "0$minutes"; }
-if($hours < 10) {$hours = "0$hours"; }
-if($days < 10) {$days = "0$days"; }
+   }
+   if($seconds < 10) { $seconds = "0$seconds"; }
+   if($minutes < 10) { $minutes = "0$minutes"; }
+   if($hours < 10) {$hours = "0$hours"; }
+   if($days < 10) {$days = "0$days"; }
  
-#print "$days:$hours:$minutes:$seconds";
- 
-$uptime = "$days days $hours hours $minutes minutes";
+   $uptime = "$days days $hours hours $minutes minutes";
  
    push @{$common->{xmltags}->{UPTIME}},
    {
