@@ -50,7 +50,7 @@ sub uptime_inventory_handler {
    #I add the treatments for my new killer feature
    $logger->debug("Yeah you are in uptime_inventory_handler :)");
  
-   if ($^0 ne 'Darwin') {
+   if ($^O ne 'Darwin') {
        my $luptime = `cat /proc/uptime | awk '{print $1}'`;
        my $uptime = undef;
        my $datetime = `uptime -s`;
