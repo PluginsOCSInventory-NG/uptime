@@ -82,7 +82,7 @@ sub uptime_inventory_handler {
     my $seconds = $uptime % 60;
 
     # Format uptime string
-    my $uptime_str = sprintf("%02d days %02d hours %02d minutes %02d seconds", $days, $hours, $minutes, $seconds);
+    my $uptime_str = "$days days $hours hours $minutes minutes $seconds seconds";
 
     # Push the uptime data to the XML tags
     push @{$common->{xmltags}->{UPTIME}}, { DURATION => [$uptime_str], LOG_DATE => [$datetime] };
