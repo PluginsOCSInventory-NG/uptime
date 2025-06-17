@@ -41,67 +41,53 @@ sub new {
 ######### Hook methods ############
  
 sub uptime_inventory_handler {
- 
-   my $self = shift;
-   my $logger = $self->{logger};
- 
-   my $common = $self->{context}->{common};
- 
-   #I add the treatments for my new killer feature
-   $logger->debug("Yeah you are in uptime_inventory_handler :)");
- 
-   if ($^O ne 'Darwin') {
-       my $luptime = `cat /proc/uptime | awk '{print $1}'`;
-       my $uptime = undef;
-       my $datetime = `uptime -s`;
-   } else {
-       my $boottime = `sysctl -n kern.boottime | awk -F '[,]' '{print \$4}`;
-       chomp $boottime;
-       my $currtime = `date -j +'%s'`;
-       chomp $currtime;
+    my $self = shift;
+    my $logger = $self->{logger};
+    my $common = $self->{context}->{common};
 
-       my $luptime=$currtime-$boottime;
-       my $uptime=undef;
-       my $datetime = `date -j -r $boottime+'%Y-%0m-%0d %H:%M:%S'`;
-       chomp $datetime;
-   }
+    $logger->debug("Entering uptime_inventory_handler");
 
-   # These help us calculate the minutes and hours
-   my $min=60;
-   my $hour = $min*60;
-   my $day = $hour*24;
- 
-   my $minutes = 0;
-   my $hours = 0;
-   my $days = 0;
- 
-   # Make the uptime number integer
-   my $seconds = int($luptime);
- 
-   while ($seconds >= $min) {
-        while ($seconds >= $hour) {
-                while ($seconds >= $day) {
-                        $seconds -= $day;
-                        ++$days;
-                }
-                $seconds -= $hour;
-                ++$hours;
+    my ($uptime, $datetime);
+
+    if ($^O eq 'darwin') {
+        # macOS-specific boot time retrieval
+        my $boottime = `sysctl -n kern.boottime`;
+        if ($boottime =~ /sec = (\d+)/) {
+            $boottime = $1;
+            my $currtime = time();
+            $uptime = $currtime - $boottime;
+            $datetime = `date -r $boottime "+%Y-%m-%d %H:%M:%S"`;
+            chomp($datetime);
+        } else {
+            $logger->error("Failed to parse boot time from sysctl output");
+            return;
         }
-        $seconds -= $min;
-        ++$minutes
-   }
-   if($seconds < 10) { $seconds = "0$seconds"; }
-   if($minutes < 10) { $minutes = "0$minutes"; }
-   if($hours < 10) {$hours = "0$hours"; }
-   if($days < 10) {$days = "0$days"; }
- 
-   $uptime = "$days days $hours hours $minutes minutes";
- 
-   push @{$common->{xmltags}->{UPTIME}},
-   {
-      DURATION => [$uptime],
-      LOG_DATE => [$datetime]
-   };
+    } else {
+        # Linux-specific uptime retrieval
+        my $uptime_output = `cat /proc/uptime`;
+        if ($uptime_output =~ /^(\d+(\.\d+)?)/) {
+            $uptime = int($1);
+            $datetime = `uptime -s`;
+            chomp($datetime);
+        } else {
+            $logger->error("Failed to parse uptime from /proc/uptime");
+            return;
+        }
+    }
+
+    # Calculate days, hours, minutes, and seconds
+    my $days = int($uptime / 86400);
+    my $hours = int(($uptime % 86400) / 3600);
+    my $minutes = int(($uptime % 3600) / 60);
+    my $seconds = $uptime % 60;
+
+    # Format uptime string
+    my $uptime_str = sprintf("%02d days %02d hours %02d minutes %02d seconds", $days, $hours, $minutes, $seconds);
+
+    # Push the uptime data to the XML tags
+    push @{$common->{xmltags}->{UPTIME}}, { DURATION => [$uptime_str], LOG_DATE => [$datetime] };
+
+    $logger->debug("Uptime: $uptime_str, Boot Time: $datetime");
 }
  
 1;
